@@ -1,0 +1,103 @@
+#!/usr/bin/env python
+
+import pybayenv
+import sys, getopt
+
+
+def usage():
+    print """
+    NAME
+             PyBayenv - A wrapper for BAYENV
+    
+    SYNOPSIS
+             PyBayenv [OPTION]... 
+
+    DESCRIPTION
+            PyBayenv is a program that enables the user to run a full BAYENV 2.0 analysis of 
+            a SNP data set. The input file must be in GENEPOP format. The user can take advantage
+            of multi-core CPUs by carrying out several independent runs of BAYENV 2.0 in parallel.
+            Additionally, the user may reduce the test set by excluding SNPs based on the maximum
+            allele frequency difference (MAFD) between populations.
+            PyBayenv also calculates a significance level for the results based on the Second 
+            Difference Method (SDM). 
+
+    OPTIONS 
+               --covsize  the number of loci in the null model
+               -c         same as --covsize
+               --debug    run program in debug mode.
+               -d         same as --debug
+               --envfile  environment variables to be used
+               -e         same as --envfile
+               --file  	  Input file
+               -f         same as --file
+               --help     display this help and exit
+               -h         same as --help
+               --iterations    number of iterations for the null model
+               -i         same as --iterations
+               --reduce   reduce a percentage of the SNPs based on MAFD
+               -r         same as --reduce
+               --numpop   number of populations in the dataset
+               -n         same as --numpop
+               --skipcov  skip building covariance matrices
+               -s         same as --skipcov
+               --testsize number of loci to test
+               -t         same as --testsize
+               --numenv   number of environment variables to test
+               -z         same as --num_env
+               --nullfile file for the null model
+               -l         same as --nullfile
+               --numtests   number of tests to perform
+               -p         same as --numtests
+               --skiptest skip the test part
+               -b         same as --skiptest
+               """
+
+try:
+    opts, args = getopt.getopt(sys.argv[1:], \
+                               "bc:e:hi:l:f:n:p:r:st:z:",
+                               ["covsize=", "envfile=", "help",
+                                "iterations=","nullfile=" "file=","numpop=","numtests=", 
+                                "reduce", "skipcov", "skiptest", "testsize", "numenv"])
+    
+except getopt.GetoptError:
+    usage()
+    sys.exit(1)
+if len(opts) == 0: 
+    usage()
+    sys.exit()
+for o, a in opts:
+    if o in ("-b", "--skiptest"):
+        pybayenv.SKIP_TEST = True
+        print pybayenv.SKIP_TEST
+    if o in ("-c", "--covsize"):
+        pybayenv.NULL_SIZE = int(a)
+    if o in ("-e", "--envfile"):
+        env_file = a
+    if o in ("-h", "--help"):
+        usage()
+        sys.exit(0)
+    if o in ("-i", "--iterations"):
+        pybayenv.ITERATIONS = a
+    if o in ("-f", "--file"):
+        input_file = a
+    if o in ("-n", "--numpop"):
+        pybayenv.NUM_POP = int(a)
+    if o in ("-p", "--numtests"):
+        pybayenv.NUM_TESTS = int(a)
+    if o in ("-r", "--reduce"):
+        pybayenv.CUT_OFF = float(a)
+    if o in ("-s", "--skipcov"):
+        pybayenv.SKIP_COVAR = True
+        print pybayenv.SKIP_COVAR
+    if o in ("-t", "--testsize"):
+        pybayenv.TEST_SIZE = int(a)
+    if o in ("-z", "--num_env"):
+        pybayenv.NUM_ENV = int(a)
+    if o in ("-l", "--nullfile"):
+        pybayenv.NULL_FILE = a
+        pybayenv.DIFF_NULL = True
+    else:
+        pybayenv.NULL_FILE = input_file
+    
+pybayenv.main(input_file, env_file)
+
