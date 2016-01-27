@@ -67,7 +67,7 @@ def debug(locus_list):
             if (not locus_list[i].is_consensus_locus(cut_off)):
                 count += 1
 
-        print "Cut off: " + str(cut_off)
+        #print "Cut off: " + str(cut_off)
         print "Total test snps = "+  str(count)
 
         sorted_freqs_data = np.sort(abs(freqs_data))
@@ -206,7 +206,6 @@ def convert_fileformat(in_file, testdata):
             
     freqs_list = []
 
-    print "Cut off = " + str(CUT_OFF)
     TEST_SIZE = len(locus_list)
    
     if (DEBUG):
@@ -226,18 +225,15 @@ def convert_fileformat(in_file, testdata):
             lines1 += locus_list[i].freqs_to_lines()
             count += 1
             
-        print "Total loci in null model = "+  str(count)
+        print "\nTotal loci in null model = "+  str(count)
 
         count = 0
-        lines2 = ""  
-        print "########################################"
-        print "TEST_SIZE = " + str(TEST_SIZE)
-        print "########################################"
+        lines2 = ""
         if (CUT_OFF < EPSILON):   
             for i in range(0, TEST_SIZE):
                 lines2 += locus_list[i].freqs_to_lines2()
                 count += 1
-            print "Total test snps = "+  str(count)
+            print "\nTotal SNPs to test = "+  str(count)
         elif (testdata):  
             print "Computing cutoff data.."
             cut_off = stats.scoreatpercentile(freqs_data, CUT_OFF)
@@ -295,22 +291,16 @@ def main(in_file, var_file):
     
     #Create the null modell
     if (SKIP_COVAR and SKIP_TEST):
-        print "Skipping null model and testing..."
-        print NUM_TESTS
-        print "Converting to bayenv format..."
-        #convert to bayenv file format
+        print "\nSkipping creating the covariance matrix and the test part of BAYENV"
+        print "\nConverting to the BAYENV file format..."
         convert_fileformat(in_file, True)
-        try:
-            print "Computing significance..."
-        except:
-            print "Could not perform significance analysis, no data available!"
 
     elif (SKIP_COVAR):
         print "Skipping null model..."
         out_file, new_out_file = convert_fileformat(in_file, True)
         test_all_snps_multip(new_out_file, cmds, TEST_SIZE)
     elif (SKIP_TEST):
-        print "Skipping testing..."
+        print "Skip the test part of BAYENV"
         try:
             if DIFF_NULL:
                 print "Computing different null = " + NULL_FILE
@@ -350,6 +340,7 @@ def main(in_file, var_file):
             #Run multiprocessing tests - THE ACTUAL TEST!!!
             test_all_snps_multip(new_out_file, cmds, TEST_SIZE)
 
+    print ""
   
 if __name__ == '__main__':
     

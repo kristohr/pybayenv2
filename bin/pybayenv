@@ -68,7 +68,6 @@ if len(opts) == 0:
 for o, a in opts:
     if o in ("-b", "--skiptest"):
         pybayenv.SKIP_TEST = True
-        print pybayenv.SKIP_TEST
     if o in ("-c", "--covsize"):
         pybayenv.NULL_SIZE = int(a)
     if o in ("-e", "--envfile"):
@@ -88,7 +87,6 @@ for o, a in opts:
         pybayenv.CUT_OFF = float(a)
     if o in ("-s", "--skipcov"):
         pybayenv.SKIP_COVAR = True
-        print pybayenv.SKIP_COVAR
     if o in ("-t", "--testsize"):
         pybayenv.TEST_SIZE = int(a)
     if o in ("-z", "--num_env"):
