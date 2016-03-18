@@ -3,6 +3,7 @@
 bayenv2
 *.bnv
 mean_covar*
+covar*
 *.out
 test*
 std_environ*
