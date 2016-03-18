@@ -242,6 +242,7 @@ def main(in_file):
 
     #convert_fileformat(in_file, True)
     print in_file
+    print test
 
     
 
