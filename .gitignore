@@ -1,3 +1,8 @@
 *.pyc
 *~
 bayenv2
+*.bnv
+covar*
+*.out
+test*
+std_environ*
