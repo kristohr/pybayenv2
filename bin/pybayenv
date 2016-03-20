@@ -50,14 +50,16 @@ def usage():
                -p         same as --numtests
                --skiptest skip the test part
                -b         same as --skiptest
+               --format   input format
+               -w         same as --format (default genepop, alt=ped)
                """
 
 try:
     opts, args = getopt.getopt(sys.argv[1:], \
-                               "bc:e:hi:l:f:n:p:r:st:z:",
+                               "bc:e:hi:l:f:n:p:r:st:z:w:",
                                ["covsize=", "envfile=", "help",
                                 "iterations=","nullfile=" "file=","numpop=","numtests=", 
-                                "reduce", "skipcov", "skiptest", "testsize", "numenv"])
+                                "reduce", "skipcov", "skiptest", "testsize", "numenv", "format="])
     
 except getopt.GetoptError:
     usage()
@@ -66,6 +68,8 @@ if len(opts) == 0:
     usage()
     sys.exit()
 for o, a in opts:
+    if o in ("-w", "--format"):
+        pybayenv.FORMAT = a
     if o in ("-b", "--skiptest"):
         pybayenv.SKIP_TEST = True
     if o in ("-c", "--covsize"):

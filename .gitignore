@@ -7,3 +7,4 @@ covar*
 *.out
 test*
 std_environ*
+*.bf

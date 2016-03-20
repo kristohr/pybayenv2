@@ -175,3 +175,6 @@ class Locus:
 
     def get_max_freq_diff(self):
         return self.freq_diff
+
+
+

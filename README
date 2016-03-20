@@ -9,7 +9,7 @@ source pybayenv.conf
 pybayenv -h
 
 #Example: Run eight parallel runs of BAYENV on 131 SNPs from African Maize (Westengen et al. 2014).
-pybayenv -f all_snps-staha.gp -e environ_var-staha.env -n 3 -z 1 -p 8 -i 10000 -E 0.2
+pybayenv -f all_snps-staha.gp -e environ_var-staha.env -n 3 -z 1 -p 8 -i 10000
 
 #The BAYENV2 program is available at https://gcbias.org/bayenv/ and the binary must be copied to the /bin directory.
 #Please remember to cite Coop et al. 2010 (BAYENV) and Günther, Torsten and Graham Coop 2013 (BAYENV 2.0) when PyBayenv is used.

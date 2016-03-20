@@ -1,6 +1,7 @@
 #!/local/bin/python
 
 from locus import *
+from convert import *
 from run_bayenv import *
 from standardize import *
 
@@ -28,13 +29,15 @@ DIFF_NULL = False #True if different null file
 NUM_TESTS = 8 #Number of tests performed
 
 NUM_POP = 0 #Number of populations in the file
-NUM_ENV = 6 #Number of environmental variablessss
+NUM_ENV = 6 #Number of environmental variables
 
 NULL_SIZE = 0
 TEST_SIZE = 0
 ITERATIONS = "5000" #Number of iterations for the tests
 CUT_OFF = 0.0 #Default cut off value (no cut off)
 EPSILON = 0.1 #Small constant
+
+FORMAT = "genepop"
 
 #Removing temporary files
 def clean():
@@ -152,58 +155,27 @@ def gen_commands(env_file, no_env_var):
 
     return cmds
 
-def gen_loci(in_file, num_pops):
-
-    locus_list = [] #List of locus names
-    
-    dataset = open(in_file, 'r')
-    lines = dataset.readlines()
-    
-    new_lines = []
-    test = ""
-    for line in lines:
-        if (len(line) > 2):
-            new_lines.append(line)
-
-    file_info = new_lines[0] #File header
-    line = new_lines[1] #Locus names
-    header = line.replace(" ", "") 
-    all_snps = header.split(',')
-    for snp in all_snps:
-        locus = Locus(snp, int(num_pops))
-        locus_list.append(locus)
-
-    new_lines.pop(0) #Removing the two first lines 
-    new_lines.pop(0)
-    pop = -1 #Population in the
-    for line in new_lines:
-        if ("Pop" in line or "pop" in line):
-            pop += 1
-            continue
-        data = line.split()
-        alleles = data[1::] #The allele data for each population
-        for i in range(0, len(alleles)):
-            al_type = get_allele_type(alleles[i])
-            locus_list[i].update_freqs(al_type, pop)
-
-    return locus_list
 
 def convert_fileformat(in_file, testdata):
-    #global NULL_FILE
-    #global ITERATIONS
-    #global NUM_POP
-    #global NULL_SIZE
     global TEST_SIZE
     global CUT_OFF
-    #global NUM_ENV
-    #global NUM_TESTS
+    global FORMAT
 
     out_file = in_file.split(".")[0] + ".bnv"
     num_pops = str(NUM_POP)
-    #Generate loci objects
-    locus_list = gen_loci(in_file, num_pops)
 
-            
+    #Generate loci objects
+    if (FORMAT == "ped"):
+        locus_list = ped2bayenv(in_file)
+        print "Generating ped-loci"
+    elif (FORMAT == "genepop"):    
+        locus_list = gen_loci(in_file, num_pops)
+        print "Generating genepop-loci"
+    else:    
+        locus_list = gen_loci(in_file, num_pops)
+        print "Generating genepop-loci"
+
+    #sys.exit(1)        
     freqs_list = []
 
     TEST_SIZE = len(locus_list)
