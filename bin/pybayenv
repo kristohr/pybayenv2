@@ -24,8 +24,6 @@ def usage():
     OPTIONS 
                --covsize  the number of loci in the null model
                -c         same as --covsize
-               --debug    run program in debug mode.
-               -d         same as --debug
                --envfile  environment variables to be used
                -e         same as --envfile
                --file  	  Input file

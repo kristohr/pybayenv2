@@ -39,12 +39,15 @@ EPSILON = 0.1 #Small constant
 
 FORMAT = "genepop"
 
+CLEAN = False
+
 #Removing temporary files
 def clean():
     
     print "Removing temporary files..."
     sys.stdout.flush()
     failure, output = commands.getstatusoutput("rm covar*")
+    failure, output = commands.getstatusoutput("rm *.out")
     print "done."
 
 def debug(locus_list):
@@ -174,8 +177,7 @@ def convert_fileformat(in_file, testdata):
     else:    
         locus_list = gen_loci(in_file, num_pops)
         print "Generating genepop-loci"
-
-    #sys.exit(1)        
+       
     freqs_list = []
 
     TEST_SIZE = len(locus_list)
@@ -186,13 +188,13 @@ def convert_fileformat(in_file, testdata):
         for i in range(0, len(locus_list)):
             locus_list[i].set_freqs()
             locus_list[i].set_max_freq_diff()
-            #locus_list[i].to_string()
             freqs_list.append(locus_list[i].get_max_freq_diff())
     
         freqs_data = np.array(freqs_list)
             
         count = 0
         lines1 = ""
+        #Generating the Bayenv format
         for i in range(0, TEST_SIZE):
             lines1 += locus_list[i].freqs_to_lines()
             count += 1
@@ -201,6 +203,7 @@ def convert_fileformat(in_file, testdata):
 
         count = 0
         lines2 = ""
+        #Generating the pybayenv format 
         if (CUT_OFF < EPSILON):   
             for i in range(0, TEST_SIZE):
                 lines2 += locus_list[i].freqs_to_lines2()
