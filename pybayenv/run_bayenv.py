@@ -4,6 +4,8 @@ import time
 import multiprocessing
 import random
 
+import numpy as np
+
 
 # Process class to run the Bayenv test phase in paralell
 class RunInProcess(multiprocessing.Process):
@@ -102,3 +104,49 @@ def compute_null_model_bayenv2(num_pops, iterations, snpfile):
     print usage
     time_usage.write(usage)
     time_usage.close()
+
+
+#Separates the covariance matrices from bayenv2 output and 
+#writes one  mean co-variance matrix
+def write_mean_covar_bayenv2():
+
+    covars = open("covars.txt", 'r')    
+
+    #Removing the first 15 lines
+    for i in range(0, 15):
+        covars.readline()
+    
+    covar_lists = []
+    cov = []
+
+    matrix_counter = 0
+    for line in covars:
+        if ("VAR-COVAR" in line):
+            matrix_counter += 1
+            covar_lists.append(cov)
+            cov = []
+        elif line == "\n":
+            continue
+        else:
+            line = line.strip("\t\n")
+            cov.append(line.split("\t"))
+
+    num_cov_matrix = np.array(covar_lists, np.float64)
+
+    matrix_mean = np.average(num_cov_matrix, axis=0)
+
+    covar_string = ""
+
+    for list in matrix_mean:
+        for elem in list:
+            covar_string += str(elem) + "\t"
+        covar_string += "\n"
+    
+    f = open("covar-cmd.txt", "a")
+    f.write(covar_string)
+    f.close()
+
+    covar_file = open("mean_covar.txt", 'w')
+    covar_file.write(covar_string)
+    covar_file.close() 
+    covars.close() 

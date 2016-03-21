@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import pybayenv
+import pybayenv, convert
 import sys, getopt
 
 
@@ -67,7 +67,7 @@ if len(opts) == 0:
     sys.exit()
 for o, a in opts:
     if o in ("-w", "--format"):
-        pybayenv.FORMAT = a
+        convert.FORMAT = a
     if o in ("-b", "--skiptest"):
         pybayenv.SKIP_TEST = True
     if o in ("-c", "--covsize"):
@@ -82,11 +82,13 @@ for o, a in opts:
     if o in ("-f", "--file"):
         input_file = a
     if o in ("-n", "--numpop"):
+        convert.NUM_POP = int(a)
         pybayenv.NUM_POP = int(a)
     if o in ("-p", "--numtests"):
         pybayenv.NUM_TESTS = int(a)
     if o in ("-r", "--reduce"):
         pybayenv.CUT_OFF = float(a)
+        convert.CUT_OFF = float(a)
     if o in ("-s", "--skipcov"):
         pybayenv.SKIP_COVAR = True
     if o in ("-t", "--testsize"):

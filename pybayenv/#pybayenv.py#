@@ -6,9 +6,6 @@ from run_bayenv import *
 from standardize import *
 
 import sys, string, re,  os, commands, time, random
-from scipy import stats
-import scipy as sp
-import numpy as np
 
 #from random import *
 
