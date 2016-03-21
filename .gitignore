@@ -1,5 +1,6 @@
 *.pyc
 *~
+*#
 bayenv2
 *.bnv
 mean_covar*

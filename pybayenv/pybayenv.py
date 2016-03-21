@@ -3,6 +3,8 @@
 from locus import *
 from convert import *
 from run_bayenv import *
+from compute_average_bf import *
+from bf2qvalues import *
 from standardize import *
 
 import sys, string, re,  os, commands, time, random
@@ -15,10 +17,10 @@ SKIP_TEST = False #True if tests are skipped
 NULL_FILE = "" #Alternative Null file
 DIFF_NULL = False #True if different null file
 
-NUM_TESTS = 8 #Number of tests performed
+NUM_TESTS = 0 #Number of tests performed
 
 NUM_POP = 0 #Number of populations in the file
-NUM_ENV = 6 #Number of environmental variables
+NUM_ENV = 0 #Number of environmental variables
 
 NULL_SIZE = 0
 TEST_SIZE = 0
@@ -145,6 +147,12 @@ def main(in_file, var_file):
             test_all_snps_multip(new_out_file, cmds, TEST_SIZE)
 
     print ""
+
+    print "Calculating average and median bf..."
+    compute_average_bf(NUM_ENV, NUM_TESTS)
+    print "Converting BF to q-values..."
+    convert2qvalues("results/average_bf.txt", NUM_ENV)
+
   
 if __name__ == '__main__':
     
